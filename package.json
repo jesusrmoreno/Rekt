@@ -1,0 +1,31 @@
+{
+  "name": "rekt",
+  "version": "0.0.1",
+  "description": "Custom Errors for NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jesusrmoreno/Rekt.git"
+  },
+  "keywords": [
+    "Errors",
+    "error",
+    "custom",
+    "errors"
+  ],
+  "author": "Jesus R Moreno <jesusrmor94@gmail.com> (http://jesusrmoreno.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jesusrmoreno/Rekt/issues"
+  },
+  "homepage": "https://github.com/jesusrmoreno/Rekt",
+  "dependencies": {
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0"
+  }
+}
