@@ -27,8 +27,8 @@ rekt.createError = function(options, callback) {
         var status    = options.status;
         rekt[errorName] = function (message) {
             Error.captureStackTrace(this, rekt[errorName]);
-            this.name = errorName;
-            this.status = status ? status : 500;
+            this.name    = errorName;
+            this.status  = status ? status : 500;
             this.message = message ? message : undefined;
         };
         rekt[errorName].displayName = errorName;

@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var rekt   = require('../rewrite.js');
+var rekt   = require('../index.js');
 describe('Rekt', function() {
   it('Should be intialized properly', function() {
     expect(rekt).to.be.an('object');
