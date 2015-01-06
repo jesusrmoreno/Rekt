@@ -44,7 +44,9 @@ rekt.wrap = function(errorName, error, statusCode) {
 };
 
 /**
- * This function is used for asserting things to be true or false. If the condition is true it simply return true, otherwise it throws an error with the provided messages/Error
+ * This function is used for asserting things to be true or false. If the
+ * condition is true it simply return true, otherwise it throws an error with
+ * the provided messages/Error
  *
  * @param   {Condition}  condition  The condition to test.
  * @return  {Boolean}               True if condition passes.
