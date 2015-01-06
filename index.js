@@ -4,9 +4,10 @@
  * Author = Jesus R. Moreno
  */
 
-var util = require('util');
-var _    = require('lodash');
-var rekt = {};
+var util    = require('util');
+var _       = require('lodash');
+var exports = {};
+var internals = {};
 
 /**
  * Easier Wrapper for the JSON.stringify
@@ -15,14 +16,14 @@ var rekt = {};
  * @return  {String}       Either the object as a string or an error message
  * saying we couldn't covert it.
  */
-function stringify(obj) {
+internals.stringify = function(obj) {
   try {
     return JSON.stringify(Error);
   }
   catch (err) {
     return '[Error converting to String' + err.message;
   }
-}
+};
 
 var errors = {
   AssertError: 500,
@@ -38,9 +39,9 @@ var errors = {
   ResourceGone: 410
 };
 
-rekt.wrap = function(errorName, error, statusCode) {
-  rekt[errorName] = error;
-  rekt[errorName].statusCode = statusCode || 500;
+exports.wrap = function(errorName, error, statusCode) {
+  exports[errorName] = error;
+  exports[errorName].statusCode = statusCode || 500;
 };
 
 /**
@@ -51,7 +52,7 @@ rekt.wrap = function(errorName, error, statusCode) {
  * @param   {Condition}  condition  The condition to test.
  * @return  {Boolean}               True if condition passes.
  */
-rekt.assert = function(condition) {
+exports.assert = function(condition) {
   var argv = arguments;
   if (condition) return true;
   if (argv.length === 2 && argv[1] instanceof Error) {
@@ -69,26 +70,26 @@ rekt.assert = function(condition) {
     if (_.isString(message)) {
       return message;
     } else if (message instanceof Error) {
-      stringify(message);
+      internals.stringify(message);
     }
   });
-  throw rekt.AssertError(messages.join(' ') || 'Unknown Error');
+  throw exports.AssertError(messages.join(' ') || 'Unknown Error');
 };
 
-rekt.createError = function(options, callback) {
+exports.createError = function(options, callback) {
   if (options.name) {
     var errorName = options.name;
     var status = options.status;
-    rekt[errorName] = function(message) {
-      Error.captureStackTrace(this, rekt[errorName]);
+    exports[errorName] = function(message) {
+      Error.captureStackTrace(this, exports[errorName]);
       this.name = errorName;
       this.status = status ? status : 500;
       this.message = message ? message : undefined;
     };
-    rekt[errorName].displayName = errorName;
-    util.inherits(rekt[errorName], Error);
+    exports[errorName].displayName = errorName;
+    util.inherits(exports[errorName], Error);
     if (callback) {
-      callback(null, rekt[errorName]);
+      callback(null, exports[errorName]);
     }
   } else {
     var err = new TypeError('Name missing or invalid.');
@@ -107,7 +108,7 @@ rekt.createError = function(options, callback) {
  * @param err The error object we threw This is not optional!
  * @param res Optional res object so that we can respond to the client
  */
-rekt.UserError = function(err, res) {
+exports.UserError = function(err, res) {
   console.log(err);
   if (res) {
     res.status(err.status);
@@ -127,7 +128,7 @@ rekt.UserError = function(err, res) {
  * @param err The error object we threw This is not optional!
  * @param res Optional res object so that we can respond to the client
  */
-rekt.ServerError = function(err, res) {
+exports.ServerError = function(err, res) {
   log.error(err);
   if (res) {
     res.status(err.status);
@@ -144,7 +145,7 @@ rekt.ServerError = function(err, res) {
  * @param err The error object we threw This is not optional!
  * @param res Optional res object so that we can respond to the client
  */
-rekt.FatalServerError = function(err, res) {
+exports.FatalServerError = function(err, res) {
   var message = [
     'Server Error, if this problem persists please contact the owners.'
   ].join('');
@@ -162,7 +163,7 @@ rekt.FatalServerError = function(err, res) {
  *
  * @param err The error we are going to log. This is not optional!
  */
-rekt.UncaughtFatalServerError = function(err) {
+exports.UncaughtFatalServerError = function(err) {
   var message = [
     'Server Error, if this problem persists please contact owners.'
   ].join('');
@@ -172,10 +173,10 @@ rekt.UncaughtFatalServerError = function(err) {
 };
 
 _.forEach(errors, function(status, name) {
-  rekt.createError({
+  exports.createError({
     name: name,
     status: status
   });
 });
 
-module.exports = rekt;
+module.exports = exports;
