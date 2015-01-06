@@ -5,45 +5,50 @@
  */
 
 var util = require('util');
-var _    = require('lodash');
+var _ = require('lodash');
 var rekt = {};
 
 var errors = {
-    BadRequest        : 400,
-    Unauthorized      : 401,
-    Forbidden         : 403,
-    NotFound          : 404,
-    MethodNotAllowed  : 405,
-    NotAcceptable     : 406,
-    ProxyAuthRequired : 407,
-    ClientTimeout     : 408,
-    Conflict          : 409,
-    ResourceGone      : 410
+  BadRequest: 400,
+  Unauthorized: 401,
+  Forbidden: 403,
+  NotFound: 404,
+  MethodNotAllowed: 405,
+  NotAcceptable: 406,
+  ProxyAuthRequired: 407,
+  ClientTimeout: 408,
+  Conflict: 409,
+  ResourceGone: 410
+};
+
+rekt.wrap = function(errorName, error, statusCode) {
+  rekt[errorName] = error;
+  rekt[errorName].statusCode = statusCode || 500;
 };
 
 rekt.createError = function(options, callback) {
-    if (options.name) {
-        var errorName = options.name;
-        var status    = options.status;
-        rekt[errorName] = function (message) {
-            Error.captureStackTrace(this, rekt[errorName]);
-            this.name    = errorName;
-            this.status  = status ? status : 500;
-            this.message = message ? message : undefined;
-        };
-        rekt[errorName].displayName = errorName;
-        util.inherits(rekt[errorName], Error);
-        if (callback) {
-            callback(null, rekt[errorName]);
-        }
-    } else {
-        var err = new TypeError('Name missing or invalid.');
-        if (callback) {
-            callback(err);
-        } else {
-            throw err;
-        }
+  if (options.name) {
+    var errorName = options.name;
+    var status = options.status;
+    rekt[errorName] = function(message) {
+      Error.captureStackTrace(this, rekt[errorName]);
+      this.name = errorName;
+      this.status = status ? status : 500;
+      this.message = message ? message : undefined;
+    };
+    rekt[errorName].displayName = errorName;
+    util.inherits(rekt[errorName], Error);
+    if (callback) {
+      callback(null, rekt[errorName]);
     }
+  } else {
+    var err = new TypeError('Name missing or invalid.');
+    if (callback) {
+      callback(err);
+    } else {
+      throw err;
+    }
+  }
 };
 
 
@@ -59,14 +64,15 @@ rekt.createError = function(options, callback) {
  * @param res Optional res object so that we can respond to the client
  */
 rekt.UserError = function(err, res) {
-    if (res) {
-        res.status(err.status);
-        res.json({
-            error: err.name,
-            message: err.message
-        });
-    }
-    log.user(err);
+  console.log(err);
+  if (res) {
+    res.status(err.status);
+    res.json({
+      error: err.name,
+      message: err.message
+    });
+  }
+  log.user(err);
 };
 
 /**
@@ -78,11 +84,11 @@ rekt.UserError = function(err, res) {
  * @param res Optional res object so that we can respond to the client
  */
 rekt.ServerError = function(err, res) {
-    log.error(err);
-    if (res) {
-        res.status(err.status);
-        res.send(err.message);
-    }
+  log.error(err);
+  if (res) {
+    res.status(err.status);
+    res.send(err.message);
+  }
 };
 
 /**
@@ -95,14 +101,14 @@ rekt.ServerError = function(err, res) {
  * @param res Optional res object so that we can respond to the client
  */
 rekt.FatalServerError = function(err, res) {
-    var message = [
-        'Server Error, if this problem persists please contact Tiltfactor.'
-    ].join('');
-    if (res) {
-        res.status(500);
-        res.send(message);
-    }
-    process.kill(process.pid);
+  var message = [
+    'Server Error, if this problem persists please contact Tiltfactor.'
+  ].join('');
+  if (res) {
+    res.status(500);
+    res.send(message);
+  }
+  process.kill(process.pid);
 };
 
 /**
@@ -113,19 +119,19 @@ rekt.FatalServerError = function(err, res) {
  * @param err The error we are going to log. This is not optional!
  */
 rekt.UncaughtFatalServerError = function(err) {
-    var message = [
-        'Server Error, if this problem persists please contact Tiltfactor.'
-    ].join('');
-    log.fatal(err);
-    log.status('Crash');
-    process.kill(process.pid);
+  var message = [
+    'Server Error, if this problem persists please contact Tiltfactor.'
+  ].join('');
+  log.fatal(err);
+  log.status('Crash');
+  process.kill(process.pid);
 };
 
 _.forEach(errors, function(status, name) {
-    rekt.createError({
-        name: name,
-        status: status
-    });
+  rekt.createError({
+    name: name,
+    status: status
+  });
 });
 
 module.exports = rekt;
