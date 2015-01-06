@@ -6,7 +6,8 @@
 
 var util    = require('util');
 var _       = require('lodash');
-var exports = {};
+
+var exports   = {};
 var internals = {};
 
 /**
