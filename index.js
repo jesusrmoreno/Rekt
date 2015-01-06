@@ -146,7 +146,7 @@ rekt.ServerError = function(err, res) {
  */
 rekt.FatalServerError = function(err, res) {
   var message = [
-    'Server Error, if this problem persists please contact Tiltfactor.'
+    'Server Error, if this problem persists please contact the owners.'
   ].join('');
   if (res) {
     res.status(500);
@@ -164,7 +164,7 @@ rekt.FatalServerError = function(err, res) {
  */
 rekt.UncaughtFatalServerError = function(err) {
   var message = [
-    'Server Error, if this problem persists please contact Tiltfactor.'
+    'Server Error, if this problem persists please contact owners.'
   ].join('');
   log.fatal(err);
   log.status('Crash');
