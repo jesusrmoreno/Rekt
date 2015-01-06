@@ -4,6 +4,7 @@ describe('Rekt', function() {
   it('Should be intialized properly', function() {
     expect(rekt).to.be.an('object');
     var keys = [
+      'AssertError',
       'createError',
       'BadRequest',
       'ClientTimeout',
@@ -13,12 +14,18 @@ describe('Rekt', function() {
       'NotAcceptable',
       'NotFound',
       'ProxyAuthRequired',
+      'FatalServerError',
+      'ServerError',
+      'UncaughtFatalServerError',
+      'UserError',
       'ResourceGone',
-      'Unauthorized'
-    ]
+      'Unauthorized',
+      'assert',
+      'wrap'
+    ];
     expect(rekt).to.have.keys(keys);
   });
-  
+
   it('Should create a new error when given both status and name', function() {
     rekt.createError({
       name: 'TestError',
@@ -30,11 +37,19 @@ describe('Rekt', function() {
   it('Should be able to use that error', function() {
     var throwTest = function() {
       throw new rekt.TestError();
-    }
+    };
     expect(throwTest).to.throw(rekt.TestError);
   });
-  
+
   it('Should fail to create error when not given name', function() {
     expect(rekt.createError).to.throw(TypeError);
   });
-})
+
+  it('Should return true when assertation is true', function() {
+    expect(rekt.assert(2 === 2)).to.equal(true);
+  });
+
+  it('Should throw when assertation is false', function() {
+    expect(rekt.assert(2 !== 2)).to.throw(rekt.AssertError);
+  });
+});
