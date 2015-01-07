@@ -10,7 +10,37 @@ var _       = require('lodash');
 var exports   = {};
 var internals = {};
 
-internals.log = console.log;
+internals.log = console.error;
+
+var errors = {
+  AssertError: 500,
+  BadRequest: 400,
+  Unauthorized: 401,
+  Forbidden: 403,
+  NotFound: 404,
+  MethodNotAllowed: 405,
+  NotAcceptable: 406,
+  ProxyAuthRequired: 407,
+  ClientTimeout: 408,
+  Conflict: 409,
+  ResourceGone: 410
+};
+
+exports.createError = function(options) {
+  exports.assert(_.has(options, 'name'), new TypeError('Missing name.'));
+  var errorName = options.name;
+  var status    = options.status || 500;
+  exports[errorName] = function(message) {
+    Error.call(this);
+    Error.captureStackTrace(this, exports[errorName]);
+    this.name = errorName;
+    this.status = status;
+    this.message = message;
+    this.isRekt = true;
+  };
+  util.inherits(exports[errorName], Error);
+};
+
 
 /**
  * Easier Wrapper for the JSON.stringify
@@ -28,25 +58,11 @@ internals.stringify = function(obj) {
   }
 };
 
-var errors = {
-  AssertError: 500,
-  BadRequest: 400,
-  Unauthorized: 401,
-  Forbidden: 403,
-  NotFound: 404,
-  MethodNotAllowed: 405,
-  NotAcceptable: 406,
-  ProxyAuthRequired: 407,
-  ClientTimeout: 408,
-  Conflict: 409,
-  ResourceGone: 410
-};
-
-exports.wrap = function(errorName, error, statusCode) {
-  exports[errorName] = error;
-  exports[errorName].statusCode = statusCode || 500;
-};
-
+/**
+ * Simple function to set the logger that we will use.
+ *
+ * @param  {function}  logCommand  The command to run.
+ */
 exports.setLogger = function(logCommand) {
   internals.log = logCommand;
 };
@@ -76,33 +92,8 @@ exports.assert = function(condition) {
     }
   });
   messages = _.compact(messages);
-  throw new exports.AssertError(messages.join(' ') || 'Unknown Error');
-};
-
-exports.createError = function(options, callback) {
-  if (options.name) {
-    var errorName = options.name;
-    var status = options.status;
-    exports[errorName] = function(message) {
-      Error.captureStackTrace(this, exports[errorName]);
-      this.name = errorName;
-      this.status = status ? status : 500;
-      this.message = message ? message : undefined;
-    };
-    util.inherits(exports[errorName], Error);
-    exports[errorName].displayName = errorName;
-    exports[errorName].name = errorName;
-    if (callback) {
-      callback(null, exports[errorName]);
-    }
-  } else {
-    var err = new TypeError('Name missing or invalid.');
-    if (callback) {
-      callback(err);
-    } else {
-      throw err;
-    }
-  }
+  var err = new exports.AssertError(messages.join(' ') || 'Unknown Error');
+  throw err;
 };
 
 /**
@@ -174,8 +165,6 @@ exports.UncaughtFatalServerError = function(err) {
   internals.log('Crash');
   process.kill(process.pid);
 };
-
-
 
 _.forEach(errors, function(status, name) {
   exports.createError({

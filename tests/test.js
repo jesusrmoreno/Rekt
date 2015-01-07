@@ -21,7 +21,7 @@ describe('Rekt', function() {
       'ResourceGone',
       'Unauthorized',
       'assert',
-      'wrap'
+      'setLogger'
     ];
     expect(rekt).to.have.keys(keys);
   });
@@ -36,9 +36,11 @@ describe('Rekt', function() {
 
   it('Should be able to use that error', function() {
     var throwTest = function() {
-      throw new rekt.TestError();
+      throw new rekt.TestError('Hello');
     };
-    expect(throwTest).to.throw(rekt.TestError);
+
+    // console.log(throwTest());
+    expect(throwTest).to.throw(rekt.TestError());
   });
 
   it('Should fail to create error when not given name', function() {
@@ -50,6 +52,9 @@ describe('Rekt', function() {
   });
 
   it('Should throw when assertation is false', function() {
-    expect(rekt.assert(2 !== 2)).to.throw(rekt.AssertError);
+    var assertTest = function() {
+      rekt.assert(2 !== 2, 'This is a test!');
+    };
+    expect(assertTest).to.throw(rekt.AssertError());
   });
 });
