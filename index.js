@@ -1,7 +1,7 @@
 /**
  * Rekt.js
  * Custom error declarations and handling.
- * Author = Jesus R. Moreno
+ * Author : Jesus R. Moreno
  */
 
 var util    = require('util');
@@ -11,34 +11,38 @@ var exports   = {};
 var internals = {};
 
 internals.log = console.error;
-
 var errors = {
-  AssertError: 500,
-  BadRequest: 400,
-  Unauthorized: 401,
-  Forbidden: 403,
-  NotFound: 404,
-  MethodNotAllowed: 405,
-  NotAcceptable: 406,
-  ProxyAuthRequired: 407,
-  ClientTimeout: 408,
-  Conflict: 409,
-  ResourceGone: 410
+  AssertError       : 500,
+  BadRequest        : 400,
+  Unauthorized      : 401,
+  Forbidden         : 403,
+  NotFound          : 404,
+  MethodNotAllowed  : 405,
+  NotAcceptable     : 406,
+  ProxyAuthRequired : 407,
+  ClientTimeout     : 408,
+  Conflict          : 409,
+  ResourceGone      : 410
 };
 
 exports.createError = function(options) {
+
   exports.assert(_.has(options, 'name'), new TypeError('Missing name.'));
-  var errorName = options.name;
-  var status    = options.status || 500;
+
+  var errorName      = options.name;
+  var status         = options.status || 500;
+
   exports[errorName] = function(message) {
     Error.call(this);
     Error.captureStackTrace(this, exports[errorName]);
-    this.name = errorName;
-    this.status = status;
+    this.name    = errorName;
+    this.status  = status;
     this.message = message;
-    this.isRekt = true;
+    this.isRekt  = true;
   };
+
   util.inherits(exports[errorName], Error);
+
 };
 
 
@@ -107,8 +111,8 @@ exports.UserError = function(err, res) {
   if (res) {
     res.status(err.status);
     res.json({
-      error: err.name,
-      message: err.message
+      error   : err.name,
+      message : err.message
     });
   }
   internals.log(err);
@@ -168,8 +172,8 @@ exports.UncaughtFatalServerError = function(err) {
 
 _.forEach(errors, function(status, name) {
   exports.createError({
-    name: name,
-    status: status
+    name   : name,
+    status : status
   });
 });
 
