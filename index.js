@@ -71,8 +71,11 @@ exports.assert = function(condition) {
       return message;
     } else if (message instanceof Error) {
       return internals.stringify(message);
+    } else {
+      return undefined;
     }
   });
+  messages = _.compact(messages);
   throw new exports.AssertError(messages.join(' ') || 'Unknown Error');
 };
 
