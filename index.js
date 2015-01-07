@@ -89,8 +89,9 @@ exports.createError = function(options, callback) {
       this.status = status ? status : 500;
       this.message = message ? message : undefined;
     };
-    exports[errorName].displayName = errorName;
     util.inherits(exports[errorName], Error);
+    exports[errorName].displayName = errorName;
+    exports[errorName].name = errorName;
     if (callback) {
       callback(null, exports[errorName]);
     }
