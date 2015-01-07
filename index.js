@@ -66,18 +66,11 @@ exports.assert = function(condition) {
     throw argv[1];
   }
   var messages;
-  messages = _.filter(argv, function(arg) {
-    if (arg !== '') {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  messages = _.map(messages, function(message) {
+  messages = _.map(argv, function(message) {
     if (_.isString(message)) {
       return message;
     } else if (message instanceof Error) {
-      internals.stringify(message);
+      return internals.stringify(message);
     }
   });
   throw new exports.AssertError(messages.join(' ') || 'Unknown Error');
@@ -178,7 +171,7 @@ exports.UncaughtFatalServerError = function(err) {
   process.kill(process.pid);
 };
 
-exports.assert(2 === 2, 'Two must always be equal to two!');
+
 
 _.forEach(errors, function(status, name) {
   exports.createError({
