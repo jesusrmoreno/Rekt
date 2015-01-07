@@ -1,6 +1,6 @@
 {
   "name": "rekt",
-  "version": "0.1.16",
+  "version": "0.1.18",
   "description": "Custom Errors for NodeJS",
   "main": "index.js",
   "scripts": {

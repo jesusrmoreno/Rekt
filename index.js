@@ -108,14 +108,11 @@ exports.assert = function(condition) {
  * @param res Optional res object so that we can respond to the client
  */
 exports.UserError = function(err, res) {
+  internals.log(err);
   if (res) {
     res.status(err.status);
-    res.json({
-      error   : err.name,
-      message : err.message
-    });
+    res.send(err);
   }
-  internals.log(err);
 };
 
 /**
@@ -130,7 +127,7 @@ exports.ServerError = function(err, res) {
   internals.log(err);
   if (res) {
     res.status(err.status);
-    res.send(err.message);
+    res.send(err);
   }
 };
 
@@ -162,11 +159,11 @@ exports.FatalServerError = function(err, res) {
  * @param err The error we are going to log. This is not optional!
  */
 exports.UncaughtFatalServerError = function(err) {
+  internals.log(err);
+  internals.log('Crash');
   var message = [
     'Server Error, if this problem persists please contact owners.'
   ].join('');
-  internals.log(err);
-  internals.log('Crash');
   process.kill(process.pid);
 };
 
