@@ -10,6 +10,8 @@ var _       = require('lodash');
 var exports   = {};
 var internals = {};
 
+internals.log = console.log;
+
 /**
  * Easier Wrapper for the JSON.stringify
  *
@@ -45,6 +47,10 @@ exports.wrap = function(errorName, error, statusCode) {
   exports[errorName].statusCode = statusCode || 500;
 };
 
+exports.setLogger = function(logCommand) {
+  internals.log = logCommand;
+};
+
 /**
  * This function is used for asserting things to be true or false. If the
  * condition is true it simply return true, otherwise it throws an error with
@@ -74,7 +80,7 @@ exports.assert = function(condition) {
       internals.stringify(message);
     }
   });
-  throw exports.AssertError(messages.join(' ') || 'Unknown Error');
+  throw new exports.AssertError(messages.join(' ') || 'Unknown Error');
 };
 
 exports.createError = function(options, callback) {
@@ -110,7 +116,6 @@ exports.createError = function(options, callback) {
  * @param res Optional res object so that we can respond to the client
  */
 exports.UserError = function(err, res) {
-  console.log(err);
   if (res) {
     res.status(err.status);
     res.json({
@@ -118,7 +123,7 @@ exports.UserError = function(err, res) {
       message: err.message
     });
   }
-  log.user(err);
+  internals.log(err);
 };
 
 /**
@@ -130,7 +135,7 @@ exports.UserError = function(err, res) {
  * @param res Optional res object so that we can respond to the client
  */
 exports.ServerError = function(err, res) {
-  log.error(err);
+  internals.log(err);
   if (res) {
     res.status(err.status);
     res.send(err.message);
@@ -168,10 +173,12 @@ exports.UncaughtFatalServerError = function(err) {
   var message = [
     'Server Error, if this problem persists please contact owners.'
   ].join('');
-  log.fatal(err);
-  log.status('Crash');
+  internals.log(err);
+  internals.log('Crash');
   process.kill(process.pid);
 };
+
+exports.assert(2 === 2, 'Two must always be equal to two!');
 
 _.forEach(errors, function(status, name) {
   exports.createError({
