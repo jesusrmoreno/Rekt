@@ -1,6 +1,6 @@
 {
   "name": "rekt",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Custom Errors for NodeJS",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/jesusrmoreno/Rekt",
   "dependencies": {
-    "lodash": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^1.10.0"
