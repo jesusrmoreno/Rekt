@@ -1,30 +1,7 @@
 var expect = require('chai').expect;
 var rekt   = require('../index.js');
 describe('Rekt', function() {
-  it('Should be intialized properly', function() {
-    expect(rekt).to.be.an('object');
-    var keys = [
-      'AssertError',
-      'createError',
-      'BadRequest',
-      'ClientTimeout',
-      'Conflict',
-      'Forbidden',
-      'MethodNotAllowed',
-      'NotAcceptable',
-      'NotFound',
-      'ProxyAuthRequired',
-      'FatalServerError',
-      'ServerError',
-      'UncaughtFatalServerError',
-      'UserError',
-      'ResourceGone',
-      'Unauthorized',
-      'assert',
-      'setLogger'
-    ];
-    expect(rekt).to.have.keys(keys);
-  });
+
 
   it('Should create a new error when given both status and name', function() {
     rekt.createError({
