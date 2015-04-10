@@ -1,9 +1,7 @@
 
 # Rekt
-## Under Development. 
-## Expect Breaking changes to the API!!!
 
-#Usage
+# Usage
 ```
 /* For a preinstantiated instance */
 var rekt = require('rekt').rekt; // Changes to this instance will persist when required elsewhere.
