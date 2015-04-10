@@ -7,7 +7,7 @@
  *         jesus.r.moreno.16@dartmouth.edu
  */
 
-const util   = require('util');
+const inherits   = require('inherits');
 
 /*
  * The Rekt class provides methods for easier managing of errors, and handlers
@@ -108,7 +108,7 @@ class Rekt {
       this.isRekt  = true;
     };
 
-    util.inherits(this[name], Error);
+    inherits(this[name], Error);
   }
 
   /*

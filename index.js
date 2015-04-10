@@ -13,7 +13,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
  *         jesus.r.moreno.16@dartmouth.edu
  */
 
-var util = require('util');
+var inherits = require('inherits');
 
 /*
  * The Rekt class provides methods for easier managing of errors, and handlers
@@ -116,7 +116,7 @@ var Rekt = (function () {
         this.isRekt = true;
       };
 
-      util.inherits(this[name], Error);
+      inherits(this[name], Error);
     }
   }, {
     key: 'assert',

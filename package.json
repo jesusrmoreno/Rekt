@@ -22,7 +22,9 @@
     "url": "https://github.com/jesusrmoreno/Rekt/issues"
   },
   "homepage": "https://github.com/jesusrmoreno/Rekt",
-  "dependencies": {},
+  "dependencies": {
+    "inherits": "^2.0.1"
+  },
   "devDependencies": {
     "babelify": "^6.0.2",
     "chai": "^1.10.0"
