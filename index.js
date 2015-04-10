@@ -14,6 +14,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
  */
 
 var inherits = require('inherits');
+var pascalize = require('pascal-case');
 
 /*
  * The Rekt class provides methods for easier managing of errors, and handlers
@@ -102,7 +103,8 @@ var Rekt = (function () {
     value: function createError(opts) {
 
       var self = this;
-      var name = opts.name || undefined;
+
+      var name = pascalize(opts.name) || undefined;
       var status = opts.status || 500;
 
       this.assert(name !== undefined, new TypeError('Cannot create unnamed error'));

@@ -8,6 +8,7 @@
  */
 
 const inherits   = require('inherits');
+const pascalize  = require('pascal-case');
 
 /*
  * The Rekt class provides methods for easier managing of errors, and handlers
@@ -92,7 +93,8 @@ class Rekt {
   createError(opts) {
 
     const self = this;
-    const name   = opts.name   || undefined;
+
+    const name   = pascalize(opts.name) || undefined;
     const status = opts.status || 500;
 
     this.assert((name !== undefined), new TypeError(
@@ -193,8 +195,5 @@ module.exports = {
   rekt: rekt,
   local: Rekt,
 };
-
-
-
 
 
