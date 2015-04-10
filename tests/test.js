@@ -1,5 +1,6 @@
 var expect = require('chai').expect;
-var rekt   = require('../index.js');
+var rekt   = require('../index.js').rekt;
+
 describe('Rekt', function() {
 
 
