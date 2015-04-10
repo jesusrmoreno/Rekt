@@ -1,7 +1,7 @@
 {
   "name": "rekt",
-  "version": "1.3.3",
-  "description": "Custom Errors for NodeJS",
+  "version": "1.3.4",
+  "description": "Easy to use custom errors and handlers.",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/test.js"

@@ -1,6 +1,8 @@
 
 # Rekt
 
+This should work on browser as well but hasn't been tested well enough to ensure. I'd love any feedback though!
+
 # Usage
 ```
 /* For a preinstantiated instance */
